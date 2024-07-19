@@ -11,3 +11,16 @@
 # WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
 # See the License for the specific language governing permissions and
 # limitations under the License.
+
+from mediapipe.python import *
+import mediapipe.python.solutions as solutions 
+import mediapipe.tasks.python as tasks
+
+
+del framework
+del gpu
+del modules
+del python
+del mediapipe
+del util
+__version__ = '0.0.1'

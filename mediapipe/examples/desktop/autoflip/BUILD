@@ -30,6 +30,11 @@ mediapipe_proto_library(
     ],
 )
 
+load(
+    "//mediapipe/framework/tool:mediapipe_files.bzl",
+    "mediapipe_files",
+)
+
 cc_binary(
     name = "run_autoflip",
     data = [
@@ -52,4 +57,5 @@ cc_binary(
         "//mediapipe/examples/desktop/autoflip/subgraph:autoflip_face_detection_subgraph",
         "//mediapipe/examples/desktop/autoflip/subgraph:autoflip_object_detection_subgraph",
     ],
+    linkopts = ["-lm"]
 )

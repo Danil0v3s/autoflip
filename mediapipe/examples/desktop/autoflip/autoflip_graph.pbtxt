@@ -165,7 +165,8 @@ node {
         score_aggregation_type: CONSTANT
       }
       scene_camera_motion_analyzer_options: {
-        motion_stabilization_threshold_percent: 0.5
+        motion_stabilization_threshold_percent: 1
+        snap_center_max_distance_percent: 0.05
         salient_point_bound: 0.499
       }
       padding_parameters: {

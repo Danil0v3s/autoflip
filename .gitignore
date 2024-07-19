@@ -5,3 +5,7 @@ mediapipe/provisioning_profile.mobileprovision
 node_modules/
 .configure.bazelrc
 .user.bazelrc
+.cache/
+build/
+input/*.mp4
+output/*.mp4

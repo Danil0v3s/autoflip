@@ -30,7 +30,7 @@ from setuptools.command import build_ext
 from setuptools.command import build_py
 from setuptools.command import install
 
-__version__ = 'dev'
+__version__ = '0.0.1'
 MP_DISABLE_GPU = os.environ.get('MEDIAPIPE_DISABLE_GPU') != '0'
 IS_WINDOWS = (platform.system() == 'Windows')
 IS_MAC = (platform.system() == 'Darwin')
@@ -227,7 +227,7 @@ class GeneratePyProtos(build_ext.build_ext):
     if not os.path.exists(output):
       sys.stderr.write('generating proto file: %s\n' % output)
       protoc_command = [
-          self._protoc, '-I.',
+          self._protoc, '-I.', '--experimental_allow_proto3_optional',
           '--python_out=' + os.path.abspath(self.build_lib), source
       ]
       _invoke_shell_command(protoc_command)

@@ -157,7 +157,7 @@ class OpenCvVideoDecoderCalculator : public CalculatorBase {
     cap_->set(cv::CAP_PROP_POS_AVI_RATIO, 0);
 
     if (cc->OutputSidePackets().HasTag(kSavedAudioPathTag)) {
-#ifdef HAVE_FFMPEG
+#ifndef TRUE
       std::string saved_audio_path = std::tmpnam(nullptr);
       std::string ffmpeg_command =
           absl::StrCat("ffmpeg -nostats -loglevel 0 -i ", input_file_path,
@@ -197,12 +197,14 @@ class OpenCvVideoDecoderCalculator : public CalculatorBase {
       cv::Mat frame = formats::MatView(image_frame.get());
       ReadFrame(frame);
       if (frame.empty()) {
+        ABSL_LOG(WARNING) << "GRAY8 -> Empty frame";
         return tool::StatusStop();
       }
     } else {
       cv::Mat tmp_frame;
       ReadFrame(tmp_frame);
       if (tmp_frame.empty()) {
+        ABSL_LOG(WARNING) << "GRAY8 else -> Empty frame";
         return tool::StatusStop();
       }
       if (format_ == ImageFormat::SRGB) {

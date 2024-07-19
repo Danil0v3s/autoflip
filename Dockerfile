@@ -33,14 +33,15 @@ RUN apt-get update && apt-get install -y --no-install-recommends \
         nodejs \
         npm \
         python3-dev \
-        python3-opencv \
         python3-pip \
+        python3-opencv \
         libopencv-core-dev \
         libopencv-highgui-dev \
         libopencv-imgproc-dev \
         libopencv-video-dev \
         libopencv-calib3d-dev \
         libopencv-features2d-dev \
+        libopencv-contrib-dev \
         software-properties-common && \
     apt-get update && apt-get install -y openjdk-8-jdk && \
     apt-get install -y mesa-common-dev libegl1-mesa-dev libgles2-mesa-dev && \
@@ -68,15 +69,18 @@ RUN ln -s /usr/bin/python3 /usr/bin/python
 
 # Install bazel
 ARG BAZEL_VERSION=6.1.1
-RUN mkdir /bazel && \
-    wget --no-check-certificate -O /bazel/installer.sh "https://github.com/bazelbuild/bazel/releases/download/${BAZEL_VERSION}/b\
-azel-${BAZEL_VERSION}-installer-linux-x86_64.sh" && \
-    wget --no-check-certificate -O  /bazel/LICENSE.txt "https://raw.githubusercontent.com/bazelbuild/bazel/master/LICENSE" && \
-    chmod +x /bazel/installer.sh && \
-    /bazel/installer.sh  && \
-    rm -f /bazel/installer.sh
+RUN mkdir /bazel 
+RUN wget --no-check-certificate -O /bazel/installer.sh "https://github.com/bazelbuild/bazel/releases/download/${BAZEL_VERSION}/bazel-${BAZEL_VERSION}-installer-linux-x86_64.sh"
+RUN wget --no-check-certificate -O  /bazel/LICENSE.txt "https://raw.githubusercontent.com/bazelbuild/bazel/master/LICENSE"
+RUN chmod +x /bazel/installer.sh
+RUN /bazel/installer.sh
+RUN rm -f /bazel/installer.sh
 
-COPY . /mediapipe/
+# COPY . /mediapipe/
+
+# sed $'s/\r$//' .bazelversion > .bazelversion
+# ln -s /usr/include/opencv4/opencv2 /usr/include/opencv2
+# apt-get install ffmpeg x264 libx264-dev libopencv-contrib-dev
 
 # If we want the docker image to contain the pre-built object_detection_offline_demo binary, do the following
 # RUN bazel build -c opt --define MEDIAPIPE_DISABLE_GPU=1 mediapipe/examples/desktop/demo:object_detection_tensorflow_demo

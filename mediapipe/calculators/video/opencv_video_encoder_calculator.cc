@@ -183,7 +183,7 @@ absl::Status OpenCvVideoEncoderCalculator::Close(CalculatorContext* cc) {
     writer_->release();
   }
   if (cc->InputSidePackets().HasTag(kAudioFilePathTag)) {
-#ifdef HAVE_FFMPEG
+#ifndef HAVE_FFMPEG
     const std::string& audio_file_path =
         cc->InputSidePackets().Tag(kAudioFilePathTag).Get<std::string>();
     if (audio_file_path.empty()) {

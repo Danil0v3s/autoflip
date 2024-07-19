@@ -18,6 +18,14 @@ exports_files(["LICENSE"])
 
 cc_library(
     name = "libffmpeg",
+    # hdrs = glob([
+    #     "/usr/include/x86_64-linux-gnu/libavcodec/**/*.h",
+    #     "/usr/include/x86_64-linux-gnu/libavformat/**/*.h",
+    #     "/usr/include/x86_64-linux-gnu/libavutil/**/*.h",
+    # ]),
+    # includes = [
+    #     "/usr/lib/x86_64-linux-gnu",
+    # ]
     linkopts = [
         "-l:libavcodec.so",
         "-l:libavformat.so",

@@ -38,17 +38,17 @@ workspace_file="$( cd "$(dirname "$0")" ; pwd -P )"/WORKSPACE
 if [ -z "$1" ]
   then
     echo "Installing OpenCV from source"
-    if [[ -x "$(command -v apt)" ]]; then
-      sudo apt update && sudo apt install build-essential git
-      sudo apt install cmake ffmpeg libavformat-dev libdc1394-22-dev libgtk2.0-dev \
-                       libjpeg-dev libpng-dev libswscale-dev libtbb2 libtbb-dev \
-                       libtiff-dev
-    elif [[ -x "$(command -v dnf)" ]]; then
-      sudo dnf update && sudo dnf install cmake gcc gcc-c git
-      sudo dnf install ffmpeg-devel libdc1394-devel gtk2-devel \
-                       libjpeg-turbo-devel libpng-devel tbb-devel \
-                       libtiff-devel
-    fi
+    #if [[ -x "$(command -v apt)" ]]; then
+    sudo apt update && sudo apt install build-essential git
+    sudo apt install cmake ffmpeg libavformat-dev libdc1394-dev libgtk2.0-dev \
+                      libjpeg-dev libpng-dev libswscale-dev libtbb2 libtbb-dev \
+                      libtiff-dev
+    # elif [[ -x "$(command -v dnf)" ]]; then
+    #   sudo dnf update && sudo dnf install cmake gcc gcc-c git
+    #   sudo dnf install ffmpeg-devel libdc1394-devel gtk2-devel \
+    #                    libjpeg-turbo-devel libpng-devel tbb-devel \
+    #                    libtiff-devel
+    #fi
     rm -rf /tmp/build_opencv
     mkdir /tmp/build_opencv
     cd /tmp/build_opencv
@@ -76,7 +76,7 @@ if [ -z "$1" ]
           -DWITH_JPEG=ON -DWITH_PNG=ON -DWITH_TIFF=ON
     make -j 16
     sudo make install
-    rm -rf /tmp/build_opencv
+    # rm -rf /tmp/build_opencv
     echo "OpenCV has been built. You can find the header files and libraries in /usr/local/include/opencv2/ and /usr/local/lib"
 
     # https://github.com/cggos/dip_cvqt/issues/1#issuecomment-284103343
