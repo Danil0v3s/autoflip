@@ -9,3 +9,4 @@ node_modules/
 build/
 input/*.mp4
 output/*.mp4
+.bash_history

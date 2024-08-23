@@ -14,6 +14,7 @@
 
 #include "mediapipe/examples/desktop/autoflip/calculators/scene_cropping_calculator.h"
 
+#include <fstream>
 #include <cmath>
 
 #include "absl/memory/memory.h"
@@ -34,6 +35,8 @@
 
 namespace mediapipe {
 namespace autoflip {
+
+std::ofstream logfile;
 
 constexpr char kInputVideoFrames[] = "VIDEO_FRAMES";
 constexpr char kInputVideoSize[] = "VIDEO_SIZE";
@@ -136,6 +139,9 @@ absl::Status SceneCroppingCalculator::GetContract(
             cc->Outputs().HasTag(kExternalRenderingFullVid) ||
             cc->Outputs().HasTag(kOutputCroppedFrames))
       << "At leaset one output stream must be specified";
+
+  logfile.open("output.csv", std::ios_base::app);
+
   return absl::OkStatus();
 }
 
@@ -592,6 +598,13 @@ absl::Status SceneCroppingCalculator::ProcessScene(const bool is_end_of_scene,
       top_static_border_size, bottom_static_border_size, continue_last_scene_,
       &crop_from_locations, cropped_frames_ptr));
 
+  // const int frame_width = scene_summary.scene_frame_width();
+  // const int num_scene_frames = scene_frame_timestamps_.size();
+  // for (int i = 0; i < num_scene_frames; i++) {
+  //   const auto location = crop_from_locations[i];
+  //   logfile << scene_frame_timestamps_[i] << "," << location.x << "," << location.width << "," << frame_width << "\n";
+  // }
+
   // Formats and outputs cropped frames.
   bool apply_padding = false;
   float vertical_fill_percent;
@@ -601,6 +614,14 @@ absl::Status SceneCroppingCalculator::ProcessScene(const bool is_end_of_scene,
       scene_summary.crop_window_width(), scene_summary.crop_window_height(),
       scene_frame_timestamps_.size(), &render_to_locations, &apply_padding,
       &padding_colors, &vertical_fill_percent, cropped_frames_ptr, cc));
+
+  const int frame_width = scene_summary.scene_frame_width();
+  const int num_scene_frames = scene_frame_timestamps_.size();
+  for (int i = 0; i < num_scene_frames; i++) {
+    const auto location = apply_padding ? render_to_locations[i] : crop_from_locations[i];
+    logfile << scene_frame_timestamps_[i] << "," << location.x << "," << location.width << "," << frame_width << "," << (location.x + (static_cast<float>(location.width) / 2)) / frame_width << "\n";
+  }
+
   // Caches prior FocusPointFrames if this was not the end of a scene.
   prior_focus_point_frames_.clear();
   if (!is_end_of_scene) {

@@ -147,6 +147,7 @@ absl::Status SceneCropper::CropFrames(
     const int top =
         top_static_border_size - (scene_frame_xforms[i].at<float>(1, 2));
     crop_from_location->push_back(cv::Rect(left, top, crop_width, crop_height));
+    // ABSL_LOG(INFO) << scene_timestamps[i] << "," << left << "," << crop_width << "," << frame_width;
   }
 
   // If no cropped_frames is passed in, return directly.

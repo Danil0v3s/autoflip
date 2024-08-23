@@ -122,20 +122,20 @@ node {
       }
       signal_settings {
         type: { standard: HUMAN }
-        min_score: 0.75
-        max_score: 0.8
+        min_score: 0.85
+        max_score: 0.9
         is_required: false
       }
+      # signal_settings {
+      #   type: { standard: PET }
+      #   min_score: 0.7
+      #   max_score: 0.75
+      #   is_required: false
+      # }
       signal_settings {
-        type: { standard: PET }
-        min_score: 0.7
-        max_score: 0.75
-        is_required: false
-      }
-      signal_settings {
-        type: { standard: CAR }
-        min_score: 0.7
-        max_score: 0.75
+        type: { standard: MOTION }
+        min_score: 0.6
+        max_score: 0.65
         is_required: false
       }
       signal_settings {
@@ -168,6 +168,7 @@ node {
         motion_stabilization_threshold_percent: 1
         snap_center_max_distance_percent: 0.05
         salient_point_bound: 0.499
+        duration_before_centering_us: 1
       }
       padding_parameters: {
         blur_cv_size: 200
@@ -178,26 +179,26 @@ node {
   }
 }
 
-# ENCODING(required): encode the video stream for the final cropped output.
-node {
-  calculator: "VideoPreStreamCalculator"
-  # Fetch frame format and dimension from input frames.
-  input_stream: "FRAME:cropped_frames"
-  # Copying frame rate and duration from original video.
-  input_stream: "VIDEO_PRESTREAM:video_header"
-  output_stream: "output_frames_video_header"
-}
+# # ENCODING(required): encode the video stream for the final cropped output.
+# node {
+#   calculator: "VideoPreStreamCalculator"
+#   # Fetch frame format and dimension from input frames.
+#   input_stream: "FRAME:cropped_frames"
+#   # Copying frame rate and duration from original video.
+#   input_stream: "VIDEO_PRESTREAM:video_header"
+#   output_stream: "output_frames_video_header"
+# }
 
-node {
-  calculator: "OpenCvVideoEncoderCalculator"
-  input_stream: "VIDEO:cropped_frames"
-  input_stream: "VIDEO_PRESTREAM:output_frames_video_header"
-  input_side_packet: "OUTPUT_FILE_PATH:output_video_path"
-  input_side_packet: "AUDIO_FILE_PATH:audio_path"
-  options: {
-    [mediapipe.OpenCvVideoEncoderCalculatorOptions.ext]: {
-      codec: "avc1"
-      video_format: "mp4"
-    }
-  }
-}
+# node {
+#   calculator: "OpenCvVideoEncoderCalculator"
+#   input_stream: "VIDEO:cropped_frames"
+#   input_stream: "VIDEO_PRESTREAM:output_frames_video_header"
+#   input_side_packet: "OUTPUT_FILE_PATH:output_video_path"
+#   input_side_packet: "AUDIO_FILE_PATH:audio_path"
+#   options: {
+#     [mediapipe.OpenCvVideoEncoderCalculatorOptions.ext]: {
+#       codec: "avc1"
+#       video_format: "mp4"
+#     }
+#   }
+# }
