@@ -101,8 +101,9 @@ absl::Status LocalizationToRegionCalculator::Open(
   return absl::OkStatus();
 }
 
-absl::Status LocalizationToRegionCalculator::Process(
-    mediapipe::CalculatorContext* cc) {
+absl::Status LocalizationToRegionCalculator::Process(mediapipe::CalculatorContext* cc) {
+  ABSL_LOG(INFO) << "Process LocalizationToRegionCalculator";
+
   const auto& annotations =
       cc->Inputs().Tag(kDetectionsTag).Get<std::vector<mediapipe::Detection>>();
   auto regions = ::absl::make_unique<DetectionSet>();

@@ -185,6 +185,7 @@ class SsdAnchorsCalculator : public CalculatorBase {
   }
 
   absl::Status Process(CalculatorContext* cc) override {
+    ABSL_LOG(INFO) << "Process SsdAnchorsCalculator";
     return absl::OkStatus();
   }
 

@@ -113,6 +113,7 @@ absl::Status DetectionLabelIdToTextCalculator::Open(CalculatorContext* cc) {
 }
 
 absl::Status DetectionLabelIdToTextCalculator::Process(CalculatorContext* cc) {
+  ABSL_LOG(INFO) << "Process DetectionLabelIdToTextCalculator";
   std::vector<Detection> output_detections;
   for (const auto& input_detection :
        cc->Inputs().Index(0).Get<std::vector<Detection>>()) {

@@ -365,6 +365,8 @@ absl::Status ImageTransformationCalculator::Open(CalculatorContext* cc) {
 }
 
 absl::Status ImageTransformationCalculator::Process(CalculatorContext* cc) {
+  ABSL_LOG(INFO) << "Process ImageTransformationCalculator";
+
   // First update the video header if it is given, based on the rotation and
   // dimensions specified as side packets or options. This will only be done
   // once, so streaming transformation changes will not be reflected in

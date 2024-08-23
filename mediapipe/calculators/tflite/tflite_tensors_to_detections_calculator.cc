@@ -252,8 +252,8 @@ absl::Status TfLiteTensorsToDetectionsCalculator::Open(CalculatorContext* cc) {
   return absl::OkStatus();
 }
 
-absl::Status TfLiteTensorsToDetectionsCalculator::Process(
-    CalculatorContext* cc) {
+absl::Status TfLiteTensorsToDetectionsCalculator::Process(CalculatorContext* cc) {
+  ABSL_LOG(INFO) << "Process TfLiteTensorsToDetectionsCalculator";
   if ((!gpu_input_ && cc->Inputs().Tag(kTensorsTag).IsEmpty()) ||
       (gpu_input_ && cc->Inputs().Tag(kTensorsGpuTag).IsEmpty())) {
     return absl::OkStatus();

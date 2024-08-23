@@ -543,6 +543,8 @@ absl::Status ScaleImageCalculator::ValidateYUVImage(CalculatorContext* cc,
 }
 
 absl::Status ScaleImageCalculator::Process(CalculatorContext* cc) {
+  ABSL_LOG(INFO) << "Process ScaleImageCalculator";
+  
   if (cc->InputTimestamp() == Timestamp::PreStream()) {
     if (cc->Inputs().HasTag("OVERRIDE_OPTIONS")) {
       if (cc->Inputs().Tag("OVERRIDE_OPTIONS").IsEmpty()) {
