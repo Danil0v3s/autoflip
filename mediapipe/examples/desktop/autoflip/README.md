@@ -14,6 +14,9 @@
 Note: AutoFlip currently only works with OpenCV 3 . Please verify your OpenCV version beforehand.
 
     ```bash
+    # downscale and downsample video
+    ffmpeg -i input/ryanreinolds.mp4 -vf "scale=-2:480,setpts=1.25*PTS" -r 10 input/reinolds.mp4 
+
     # no gpu
     bazel build -c opt --define MEDIAPIPE_DISABLE_GPU=1 --define xnn_enable_avx512fp16=false --define xnn_enable_avxvnni=false --define xnn_enable_avx512amx=false mediapipe/examples/desktop/autoflip:run_autoflip
 

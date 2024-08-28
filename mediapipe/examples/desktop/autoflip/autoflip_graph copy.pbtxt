@@ -1,50 +1,49 @@
-# Autoflip graph that renders the final cropped video and debugging videos.
-# For use by developers who may be adding signals and adjusting weights.
+# Autoflip graph that only renders the final cropped video. For use with
+# end user applications.
 max_queue_size: -1
-#max_queue_size: 16
 
 # VIDEO_PREP: Decodes an input video file into images and a video header.
 node {
   calculator: "OpenCvVideoDecoderCalculator"
   input_side_packet: "INPUT_FILE_PATH:input_video_path"
-  output_stream: "VIDEO:video_frames_scaled"
-  # output_stream: "VIDEO_PRESTREAM:video_header"
-  # output_side_packet: "SAVED_AUDIO_PATH:audio_path"
+  output_stream: "VIDEO:video_raw"
+  output_stream: "VIDEO_PRESTREAM:video_header"
+  output_side_packet: "SAVED_AUDIO_PATH:audio_path"
 }
 
 # VIDEO_PREP: Scale the input video before feature extraction.
-# node {
-#   calculator: "ScaleImageCalculator"
-#   input_stream: "FRAMES:video_raw"
-#   input_stream: "VIDEO_HEADER:video_header"
-#   output_stream: "FRAMES:video_frames_scaled"
-#   options: {
-#     [mediapipe.ScaleImageCalculatorOptions.ext]: {
-#       preserve_aspect_ratio: true
-#       output_format: SRGB
-#       target_width: 480
-#       algorithm: DEFAULT_WITHOUT_UPSCALE
-#     }
-#   }
-# }
+node {
+  calculator: "ScaleImageCalculator"
+  input_stream: "FRAMES:video_raw"
+  input_stream: "VIDEO_HEADER:video_header"
+  output_stream: "FRAMES:video_frames_scaled"
+  options: {
+    [mediapipe.ScaleImageCalculatorOptions.ext]: {
+      preserve_aspect_ratio: true
+      output_format: SRGB
+      target_width: 480
+      algorithm: DEFAULT_WITHOUT_UPSCALE
+    }
+  }
+}
 
 # VIDEO_PREP: Create a low frame rate stream for feature extraction.
-# node {
-#   calculator: "PacketThinnerCalculator"
-#   input_stream: "video_frames_scaled"
-#   output_stream: "video_frames_scaled_downsampled"
-#   options: {
-#     [mediapipe.PacketThinnerCalculatorOptions.ext]: {
-#       thinner_type: ASYNC
-#       period: 200000
-#     }
-#   }
-# }
+node {
+  calculator: "PacketThinnerCalculator"
+  input_stream: "video_frames_scaled"
+  output_stream: "video_frames_scaled_downsampled"
+  options: {
+    [mediapipe.PacketThinnerCalculatorOptions.ext]: {
+      thinner_type: SYNC
+      period: 200000
+    }
+  }
+}
 
 # DETECTION: find borders around the video and major background color.
 node {
   calculator: "BorderDetectionCalculator"
-  input_stream: "VIDEO:video_frames_scaled"
+  input_stream: "VIDEO:video_raw"
   output_stream: "DETECTED_BORDERS:borders"
 }
 
@@ -67,12 +66,12 @@ node {
 # DETECTION: find faces on the down sampled stream
 node {
   calculator: "AutoFlipFaceDetectionSubgraph"
-  input_stream: "VIDEO:video_frames_scaled"
+  input_stream: "VIDEO:video_frames_scaled_downsampled"
   output_stream: "DETECTIONS:face_detections"
 }
 node {
   calculator: "FaceToRegionCalculator"
-  input_stream: "VIDEO:video_frames_scaled"
+  input_stream: "VIDEO:video_frames_scaled_downsampled"
   input_stream: "FACES:face_detections"
   output_stream: "REGIONS:face_regions"
 }
@@ -80,7 +79,7 @@ node {
 # DETECTION: find objects on the down sampled stream
 node {
   calculator: "AutoFlipObjectDetectionSubgraph"
-  input_stream: "VIDEO:video_frames_scaled"
+  input_stream: "VIDEO:video_frames_scaled_downsampled"
   output_stream: "DETECTIONS:object_detections"
 }
 node {
@@ -119,12 +118,12 @@ node {
         type { standard: FACE_FULL }
         min_score: 0.8
         max_score: 0.85
-        is_required: true
+        is_required: false
       }
       signal_settings {
         type: { standard: HUMAN }
-        min_score: 0.7
-        max_score: 0.8
+        min_score: 0.85
+        max_score: 0.9
         is_required: false
       }
       # signal_settings {
@@ -133,18 +132,18 @@ node {
       #   max_score: 0.75
       #   is_required: false
       # }
-      # signal_settings {
-      #   type: { standard: CAR }
-      #   min_score: 0.7
-      #   max_score: 0.75
-      #   is_required: false
-      # }
-      # signal_settings {
-      #   type: { standard: OBJECT }
-      #   min_score: 0.1
-      #   max_score: 0.2
-      #   is_required: false
-      # }
+      signal_settings {
+        type: { standard: MOTION }
+        min_score: 0.6
+        max_score: 0.65
+        is_required: false
+      }
+      signal_settings {
+        type: { standard: OBJECT }
+        min_score: 0.1
+        max_score: 0.2
+        is_required: false
+      }
     }
   }
 }
@@ -153,12 +152,12 @@ node {
 node {
   calculator: "SceneCroppingCalculator"
   input_side_packet: "EXTERNAL_ASPECT_RATIO:aspect_ratio"
-  input_stream: "VIDEO_FRAMES:video_frames_scaled"
-  input_stream: "KEY_FRAMES:video_frames_scaled"
+  input_stream: "VIDEO_FRAMES:video_raw"
+  input_stream: "KEY_FRAMES:video_frames_scaled_downsampled"
   input_stream: "DETECTION_FEATURES:salient_regions"
   input_stream: "STATIC_FEATURES:borders"
   input_stream: "SHOT_BOUNDARIES:shot_change"
-  output_stream: "EXTERNAL_RENDERING_PER_FRAME:not_used"
+  output_stream: "CROPPED_FRAMES:cropped_frames"
   options: {
     [mediapipe.autoflip.SceneCroppingCalculatorOptions.ext]: {
       max_scene_size: 600
@@ -166,8 +165,10 @@ node {
         score_aggregation_type: CONSTANT
       }
       scene_camera_motion_analyzer_options: {
-        motion_stabilization_threshold_percent: 0.5
+        motion_stabilization_threshold_percent: 1
+        snap_center_max_distance_percent: 0.05
         salient_point_bound: 0.499
+        duration_before_centering_us: 1
       }
       padding_parameters: {
         blur_cv_size: 200
@@ -177,3 +178,27 @@ node {
     }
   }
 }
+
+# # ENCODING(required): encode the video stream for the final cropped output.
+# node {
+#   calculator: "VideoPreStreamCalculator"
+#   # Fetch frame format and dimension from input frames.
+#   input_stream: "FRAME:cropped_frames"
+#   # Copying frame rate and duration from original video.
+#   input_stream: "VIDEO_PRESTREAM:video_header"
+#   output_stream: "output_frames_video_header"
+# }
+
+# node {
+#   calculator: "OpenCvVideoEncoderCalculator"
+#   input_stream: "VIDEO:cropped_frames"
+#   input_stream: "VIDEO_PRESTREAM:output_frames_video_header"
+#   input_side_packet: "OUTPUT_FILE_PATH:output_video_path"
+#   input_side_packet: "AUDIO_FILE_PATH:audio_path"
+#   options: {
+#     [mediapipe.OpenCvVideoEncoderCalculatorOptions.ext]: {
+#       codec: "avc1"
+#       video_format: "mp4"
+#     }
+#   }
+# }

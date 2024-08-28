@@ -38,6 +38,7 @@ node {
   options: {
     [mediapipe.TfLiteInferenceCalculatorOptions.ext] {
       model_path: "face_detection_front.tflite"
+      delegate { gpu {use_advanced_gpu_api: true} }
     }
   }
 }

@@ -38,6 +38,7 @@ node {
   options: {
     [mediapipe.TfLiteInferenceCalculatorOptions.ext] {
       model_path: "mediapipe/models/ssdlite_object_detection.tflite"
+      delegate { gpu {use_advanced_gpu_api: true} }
     }
   }
 }
