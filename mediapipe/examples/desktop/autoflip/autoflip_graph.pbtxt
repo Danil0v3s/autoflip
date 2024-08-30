@@ -107,7 +107,7 @@ node {
         type { standard: FACE_CORE_LANDMARKS }
         min_score: 0.85
         max_score: 0.9
-        is_required: false
+        is_required: true
       }
       signal_settings {
         type { standard: FACE_ALL_LANDMARKS }
@@ -119,7 +119,7 @@ node {
         type { standard: FACE_FULL }
         min_score: 0.8
         max_score: 0.85
-        is_required: true
+        is_required: false
       }
       signal_settings {
         type: { standard: HUMAN }
@@ -150,30 +150,30 @@ node {
 }
 
 # CROPPING: make decisions about how to crop each frame.
-node {
-  calculator: "SceneCroppingCalculator"
-  input_side_packet: "EXTERNAL_ASPECT_RATIO:aspect_ratio"
-  input_stream: "VIDEO_FRAMES:video_frames_scaled"
-  input_stream: "KEY_FRAMES:video_frames_scaled"
-  input_stream: "DETECTION_FEATURES:salient_regions"
-  input_stream: "STATIC_FEATURES:borders"
-  input_stream: "SHOT_BOUNDARIES:shot_change"
-  output_stream: "EXTERNAL_RENDERING_PER_FRAME:not_used"
-  options: {
-    [mediapipe.autoflip.SceneCroppingCalculatorOptions.ext]: {
-      max_scene_size: 600
-      key_frame_crop_options: {
-        score_aggregation_type: CONSTANT
-      }
-      scene_camera_motion_analyzer_options: {
-        motion_stabilization_threshold_percent: 0.5
-        salient_point_bound: 0.499
-      }
-      padding_parameters: {
-        blur_cv_size: 200
-        overlay_opacity: 0.6
-      }
-      target_size_type: MAXIMIZE_TARGET_DIMENSION
-    }
-  }
-}
+# node {
+#   calculator: "SceneCroppingCalculator"
+#   input_side_packet: "EXTERNAL_ASPECT_RATIO:aspect_ratio"
+#   input_stream: "VIDEO_FRAMES:video_frames_scaled"
+#   input_stream: "KEY_FRAMES:video_frames_scaled"
+#   input_stream: "DETECTION_FEATURES:salient_regions"
+#   input_stream: "STATIC_FEATURES:borders"
+#   input_stream: "SHOT_BOUNDARIES:shot_change"
+#   output_stream: "EXTERNAL_RENDERING_PER_FRAME:not_used"
+#   options: {
+#     [mediapipe.autoflip.SceneCroppingCalculatorOptions.ext]: {
+#       max_scene_size: 600
+#       key_frame_crop_options: {
+#         score_aggregation_type: CONSTANT
+#       }
+#       scene_camera_motion_analyzer_options: {
+#         motion_stabilization_threshold_percent: 0.5
+#         salient_point_bound: 0.499
+#       }
+#       padding_parameters: {
+#         blur_cv_size: 200
+#         overlay_opacity: 0.6
+#       }
+#       target_size_type: MAXIMIZE_TARGET_DIMENSION
+#     }
+#   }
+# }
