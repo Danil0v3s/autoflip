@@ -76,11 +76,9 @@ RUN chmod +x /bazel/installer.sh
 RUN /bazel/installer.sh
 RUN rm -f /bazel/installer.sh
 
-# COPY . /mediapipe/
+ADD . /workspace/
+RUN chmod +x /workspace/entrypoint.sh
 
-# sed $'s/\r$//' .bazelversion > .bazelversion
-# ln -s /usr/include/opencv4/opencv2 /usr/include/opencv2
-# apt-get install ffmpeg x264 libx264-dev libopencv-contrib-dev
+WORKDIR /workspace
 
-# If we want the docker image to contain the pre-built object_detection_offline_demo binary, do the following
-# RUN bazel build -c opt --define MEDIAPIPE_DISABLE_GPU=1 mediapipe/examples/desktop/demo:object_detection_tensorflow_demo
+RUN bazel build -c opt --define MEDIAPIPE_DISABLE_GPU=1 --define xnn_enable_avx512fp16=false --define xnn_enable_avxvnni=false --define xnn_enable_avx512amx=false mediapipe/examples/desktop/autoflip:run_autoflip
