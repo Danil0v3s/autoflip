@@ -8,5 +8,5 @@ node_modules/
 .cache/
 build/
 input/*.mp4
-output/*.mp4
+output/*.csv
 .bash_history

@@ -145,6 +145,7 @@ namespace mediapipe
             .Tag(kExternalRenderingFullVid)
             .Set<std::vector<ExternalRenderFrame>>();
       }
+
       RET_CHECK(cc->Inputs().HasTag(kInputVideoFrames) ^
                 cc->Inputs().HasTag(kInputVideoSize))
           << "VIDEO_FRAMES or VIDEO_SIZE must be set and not both.";
@@ -156,8 +157,8 @@ namespace mediapipe
                 cc->Outputs().HasTag(kExternalRenderingFullVid) ||
                 cc->Outputs().HasTag(kOutputCroppedFrames))
           << "At leaset one output stream must be specified";
-
-      logfile.open("output.csv", std::ios_base::app);
+      
+      logfile.open("output/output.csv", std::ios_base::trunc);
 
       return absl::OkStatus();
     }
