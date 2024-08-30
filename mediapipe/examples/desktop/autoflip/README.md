@@ -15,7 +15,7 @@ Note: AutoFlip currently only works with OpenCV 3 . Please verify your OpenCV ve
 
     ```bash
     # docker
-    docker run -v ./input:/workspace/input -v ./output:/workspace/output -it autoflip ./entrypoint.sh ryanreinolds.mp4 3:4
+    docker run -v ./input:/workspace/input -v ./output:/workspace/output daniloleemes/autoflip ./entrypoint.sh ryanreinolds.mp4 3:4
 
     # downscale and downsample video
     ffmpeg -i input/ryanreinolds.mp4 -vf "scale=-2:480,fps=10" input/reinolds.mp4 

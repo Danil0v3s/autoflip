@@ -82,3 +82,5 @@ RUN chmod +x /workspace/entrypoint.sh
 WORKDIR /workspace
 
 RUN bazel build -c opt --define MEDIAPIPE_DISABLE_GPU=1 --define xnn_enable_avx512fp16=false --define xnn_enable_avxvnni=false --define xnn_enable_avx512amx=false mediapipe/examples/desktop/autoflip:run_autoflip
+
+ENTRYPOINT ["/bin/bash"]
