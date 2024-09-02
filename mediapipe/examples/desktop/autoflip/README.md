@@ -22,6 +22,7 @@ Note: AutoFlip currently only works with OpenCV 3 . Please verify your OpenCV ve
 
     # no gpu
     bazel build -c opt --define MEDIAPIPE_DISABLE_GPU=1 --define xnn_enable_avx512fp16=false --define xnn_enable_avxvnni=false --define xnn_enable_avx512amx=false mediapipe/examples/desktop/autoflip:run_autoflip
+    
     bazel build --compilation_mode=dbg --define MEDIAPIPE_DISABLE_GPU=1 --define xnn_enable_avx512fp16=false --define xnn_enable_avxvnni=false --define xnn_enable_avx512amx=false mediapipe/examples/desktop/autoflip:run_autoflip
 
     # gpu

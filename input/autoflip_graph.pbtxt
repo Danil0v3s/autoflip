@@ -1,7 +1,7 @@
 # Autoflip graph that renders the final cropped video and debugging videos.
 # For use by developers who may be adding signals and adjusting weights.
-max_queue_size: -1
-#max_queue_size: 16
+#max_queue_size: -1
+max_queue_size: 32
 
 # VIDEO_PREP: Decodes an input video file into images and a video header.
 node {
@@ -70,13 +70,13 @@ node {
   input_stream: "face_regions"
   input_stream: "object_regions"
   output_stream: "salient_regions"
-  options {
+   options {
     [mediapipe.autoflip.SignalFusingCalculatorOptions.ext] {
       signal_settings {
         type { standard: FACE_CORE_LANDMARKS }
         min_score: 0.85
         max_score: 0.9
-        is_required: true
+        is_required: false
       }
       signal_settings {
         type { standard: FACE_ALL_LANDMARKS }
@@ -92,8 +92,8 @@ node {
       }
       signal_settings {
         type: { standard: HUMAN }
-        min_score: 0.7
-        max_score: 0.8
+        min_score: 0.85
+        max_score: 0.9
         is_required: false
       }
       # signal_settings {
@@ -102,18 +102,18 @@ node {
       #   max_score: 0.75
       #   is_required: false
       # }
-      # signal_settings {
-      #   type: { standard: CAR }
-      #   min_score: 0.7
-      #   max_score: 0.75
-      #   is_required: false
-      # }
-      # signal_settings {
-      #   type: { standard: OBJECT }
-      #   min_score: 0.1
-      #   max_score: 0.2
-      #   is_required: false
-      # }
+      signal_settings {
+        type: { standard: MOTION }
+        min_score: 0.9
+        max_score: 0.95
+        is_required: true
+      }
+      signal_settings {
+        type: { standard: OBJECT }
+        min_score: 0.1
+        max_score: 0.2
+        is_required: false
+      }
     }
   }
 }
