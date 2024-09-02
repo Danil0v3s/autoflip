@@ -102,7 +102,7 @@ absl::Status LocalizationToRegionCalculator::Open(
 }
 
 absl::Status LocalizationToRegionCalculator::Process(mediapipe::CalculatorContext* cc) {
-  ABSL_LOG(INFO) << "Process LocalizationToRegionCalculator";
+  //ABSL_LOG(INFO) << "Process LocalizationToRegionCalculator";
 
   const auto& annotations =
       cc->Inputs().Tag(kDetectionsTag).Get<std::vector<mediapipe::Detection>>();

@@ -411,7 +411,7 @@ namespace mediapipe
 
     absl::Status SceneCroppingCalculator::Process(mediapipe::CalculatorContext *cc)
     {
-      ABSL_LOG(INFO) << "Process SceneCroppingCalculator";
+      //ABSL_LOG(INFO) << "Process SceneCroppingCalculator";
       
       // Sets frame dimension and initializes scenecroppingcalculator on first video
       // frame.

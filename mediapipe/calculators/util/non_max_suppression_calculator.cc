@@ -182,7 +182,7 @@ class NonMaxSuppressionCalculator : public CalculatorBase {
   }
 
   absl::Status Process(CalculatorContext* cc) override {
-    ABSL_LOG(INFO) << "Process NonMaxSuppressionCalculator";
+    //ABSL_LOG(INFO) << "Process NonMaxSuppressionCalculator";
 
     // Add all input detections to the same vector.
     Detections input_detections;

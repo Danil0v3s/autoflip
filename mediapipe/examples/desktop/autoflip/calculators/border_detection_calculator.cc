@@ -128,7 +128,7 @@ namespace mediapipe
 
     absl::Status BorderDetectionCalculator::Process(mediapipe::CalculatorContext *cc)
     {
-      ABSL_LOG(INFO) << "Process BorderDetectionCalculator";
+      //ABSL_LOG(INFO) << "Process BorderDetectionCalculator";
 
       if (!cc->Inputs().HasTag(kVideoInputTag) ||
           cc->Inputs().Tag(kVideoInputTag).Value().IsEmpty())

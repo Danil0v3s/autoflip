@@ -437,7 +437,7 @@ absl::Status TfLiteInferenceCalculator::Open(CalculatorContext* cc) {
 }
 
 absl::Status TfLiteInferenceCalculator::Process(CalculatorContext* cc) {
-  ABSL_LOG(INFO) << "Process TfLiteInferenceCalculator";
+  //ABSL_LOG(INFO) << "Process TfLiteInferenceCalculator";
   
   return RunInContextIfNeeded([this, cc]() -> absl::Status {
     // 0. Declare outputs

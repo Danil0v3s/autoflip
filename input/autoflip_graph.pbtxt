@@ -1,7 +1,7 @@
 # Autoflip graph that renders the final cropped video and debugging videos.
 # For use by developers who may be adding signals and adjusting weights.
-#max_queue_size: -1
-max_queue_size: 32
+max_queue_size: -1
+#max_queue_size: 4096
 
 # VIDEO_PREP: Decodes an input video file into images and a video header.
 node {
@@ -16,6 +16,19 @@ node {
   input_stream: "VIDEO:video_frames_scaled"
   output_stream: "DETECTED_BORDERS:borders"
 }
+
+# VIDEO_PREP: Create a low frame rate stream for feature extraction.
+# node {
+#   calculator: "PacketThinnerCalculator"
+#   input_stream: "video_frames_scaled"
+#   output_stream: "video_frames_scaled_downsampled"
+#   options: {
+#     [mediapipe.PacketThinnerCalculatorOptions.ext]: {
+#       thinner_type: SYNC
+#       period: 200000
+#     }
+#   }
+# }
 
 # DETECTION: find shot/scene boundaries on the full frame rate stream.
 node {
@@ -106,7 +119,7 @@ node {
         type: { standard: MOTION }
         min_score: 0.9
         max_score: 0.95
-        is_required: true
+        is_required: false
       }
       signal_settings {
         type: { standard: OBJECT }

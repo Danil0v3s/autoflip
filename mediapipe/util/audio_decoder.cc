@@ -562,7 +562,7 @@ absl::Status AudioPacketProcessor::AddAudioDataToBuffer(
     last_timestamp_ = output_timestamp;
     if (last_frame_time_regression_detected_) {
       last_frame_time_regression_detected_ = false;
-      ABSL_LOG(INFO) << "Processor " << this
+      //ABSL_LOG(INFO) << "Processor " << this
                      << " resumed audio packet processing.";
     }
   } else if (!last_frame_time_regression_detected_) {

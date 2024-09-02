@@ -273,7 +273,7 @@ namespace mediapipe
 
   absl::Status TfLiteTensorsToDetectionsCalculator::Process(CalculatorContext *cc)
   {
-    ABSL_LOG(INFO) << "Process TfLiteTensorsToDetectionsCalculator";
+    // ABSL_LOG(INFO) << "Process TfLiteTensorsToDetectionsCalculator";
     if ((!gpu_input_ && cc->Inputs().Tag(kTensorsTag).IsEmpty()) ||
         (gpu_input_ && cc->Inputs().Tag(kTensorsGpuTag).IsEmpty()))
     {
@@ -327,6 +327,7 @@ namespace mediapipe
       ABSL_CHECK_EQ(raw_score_tensor->dims->data[2], num_classes_);
       const float *raw_boxes = raw_box_tensor->data.f;
       const float *raw_scores = raw_score_tensor->data.f;
+      std::vector<float> scores_vector(raw_score_tensor->data.f, raw_score_tensor->data.f + num_boxes_ * num_classes_);
 
       // TODO: Support other options to load anchors.
       if (!anchors_init_)
@@ -367,9 +368,9 @@ namespace mediapipe
         for (int score_idx = 0; score_idx < num_classes_; ++score_idx)
         {
           int score_linear_idx = i * num_classes_ + score_idx;
-          if (ignore_classes_.find(score_idx) == ignore_classes_.end() && score_linear_idx < raw_scores_length)
+          if (ignore_classes_.find(score_idx) == ignore_classes_.end() && score_linear_idx < scores_vector.size())
           {
-            auto score = raw_scores[score_linear_idx];
+            auto score = scores_vector[score_linear_idx];
             if (options_.sigmoid_score())
             {
               if (options_.has_score_clipping_thresh())

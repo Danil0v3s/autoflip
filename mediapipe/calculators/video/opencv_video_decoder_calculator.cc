@@ -208,8 +208,8 @@ namespace mediapipe
 
     absl::Status Process(CalculatorContext *cc) override
     {
-      ABSL_LOG(INFO) << "Process OpenCvVideoDecoderCalculator";
-      
+      // ABSL_LOG(INFO) << "Process OpenCvVideoDecoderCalculator";
+
       auto image_frame = absl::make_unique<ImageFrame>(format_, width_, height_,
                                                        /*alignment_boundary=*/1);
       // Use microsecond as the unit of time.
@@ -220,7 +220,8 @@ namespace mediapipe
         ReadFrame(frame);
         if (frame.empty())
         {
-          ABSL_LOG(WARNING) << "GRAY8 -> Empty frame";
+          // ABSL_LOG(WARNING) << "GRAY8 -> Empty frame";
+          // frame.setTo(cv::Scalar(255, 0, 255));
           return tool::StatusStop();
         }
       }
@@ -230,9 +231,9 @@ namespace mediapipe
         ReadFrame(tmp_frame);
         if (tmp_frame.empty())
         {
-          ABSL_LOG(WARNING) << "GRAY8 else -> Empty frame";
           return tool::StatusStop();
         }
+
         if (format_ == ImageFormat::SRGB)
         {
           cv::cvtColor(tmp_frame, formats::MatView(image_frame.get()),
@@ -244,6 +245,8 @@ namespace mediapipe
                        cv::COLOR_BGRA2RGBA);
         }
       }
+
+      // ABSL_LOG(WARNING) << prev_timestamp_ << "," << timestamp << "," << decoded_frames_ << "," << frame_count_;
       // If the timestamp of the current frame is not greater than the one of the
       // previous frame, the new frame will be discarded.
       if (prev_timestamp_ < timestamp)
@@ -262,6 +265,7 @@ namespace mediapipe
       {
         cap_->release();
       }
+      ABSL_LOG(WARNING) << decoded_frames_ << "," << frame_count_;
       if (decoded_frames_ != frame_count_)
       {
         ABSL_LOG(WARNING) << "Not all the frames are decoded (total frames: "

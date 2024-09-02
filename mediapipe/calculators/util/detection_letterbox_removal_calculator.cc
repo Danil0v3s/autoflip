@@ -90,7 +90,7 @@ class DetectionLetterboxRemovalCalculator : public CalculatorBase {
   }
 
   absl::Status Process(CalculatorContext* cc) override {
-    ABSL_LOG(INFO) << "Process DetectionLetterboxRemovalCalculator";
+    //ABSL_LOG(INFO) << "Process DetectionLetterboxRemovalCalculator";
     // Only process if there's input detections.
     if (cc->Inputs().Tag(kDetectionsTag).IsEmpty()) {
       return absl::OkStatus();

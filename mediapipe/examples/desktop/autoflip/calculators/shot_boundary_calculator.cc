@@ -128,7 +128,7 @@ void ShotBoundaryCalculator::Transmit(mediapipe::CalculatorContext* cc,
 }
 
 absl::Status ShotBoundaryCalculator::Process(mediapipe::CalculatorContext* cc) {
-  ABSL_LOG(INFO) << "Process ShotBoundaryCalculator";
+  //ABSL_LOG(INFO) << "Process ShotBoundaryCalculator";
 
   // Connect to input frame and make a mutable copy.
   cv::Mat frame_org = mediapipe::formats::MatView(

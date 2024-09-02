@@ -113,7 +113,7 @@ namespace mediapipe
     absl::Status Close(CalculatorContext *cc) override;
     absl::Status Process(CalculatorContext *cc) override
     {
-      ABSL_LOG(INFO) << "Process PacketThinnerCalculator";
+      //ABSL_LOG(INFO) << "Process PacketThinnerCalculator";
 
       if (cc->InputTimestamp() < start_time_)
       {

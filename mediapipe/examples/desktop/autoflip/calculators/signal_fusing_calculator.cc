@@ -300,7 +300,7 @@ namespace mediapipe
 
     absl::Status SignalFusingCalculator::Process(mediapipe::CalculatorContext *cc)
     {
-      ABSL_LOG(INFO) << "Process SignalFusingCalculator";
+      //ABSL_LOG(INFO) << "Process SignalFusingCalculator";
 
       bool is_boundary = false;
       if (process_by_scene_)

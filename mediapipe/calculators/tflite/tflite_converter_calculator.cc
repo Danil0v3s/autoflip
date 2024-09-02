@@ -255,7 +255,7 @@ absl::Status TfLiteConverterCalculator::Open(CalculatorContext* cc) {
 }
 
 absl::Status TfLiteConverterCalculator::Process(CalculatorContext* cc) {
-  ABSL_LOG(INFO) << "Process TfLiteConverterCalculator";
+  //ABSL_LOG(INFO) << "Process TfLiteConverterCalculator";
 
   if (use_gpu_) {
     if (cc->Inputs().Tag(kGpuBufferTag).IsEmpty()) {

@@ -3,7 +3,7 @@
 input_video=$1
 aspect_ratio=$2
 
-ffmpeg -y -i input/${input_video} -vf "scale=-2:480" input/input_low.mp4
+#ffmpeg -y -i input/${input_video} -vf "scale=-2:480,fps=24" input/input_low.mp4
 
 bazel-bin/mediapipe/examples/desktop/autoflip/run_autoflip \
         --calculator_graph_config_file=input/autoflip_graph.pbtxt \
