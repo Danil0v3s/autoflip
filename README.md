@@ -3,7 +3,8 @@
 ## Usage
 
 - Linux
-    Either compile it yourself by installing the dependencies declared at the [Dockerfile](/src/Dockerfile) or pull the docker container from `daniloleemes/autoflip:latest` and run it with
+
+  Either compile it yourself by installing the dependencies declared at the [Dockerfile](/src/Dockerfile) or pull the docker container from `daniloleemes/autoflip:latest` and run it with
 
     ```bash
     docker run -v ./input:/workspace/input -v ./output:/workspace/output daniloleemes/autoflip ./entrypoint.sh input_video.mp4 3:4
