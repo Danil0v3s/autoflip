@@ -1,5 +1,10 @@
 # Google's MediaPipe Autoflip fork
 
+Changes made to this fork:
+- It will generate a `csv` file containing the calculated crop points of each frames at the output folder
+- I changed a pointer to a vector at `TfLiteTensorsToDetectionsCalculator` because it was throwing a segmentation fault intermittently
+- I also downscale and change the video frame rate prior to executing autoflip so it consumes less RAM and doesn't kill my machine. It uses ffmpeg which is a requirement for autoflip to downscale to 480w (preserve aspect ratio) and change the fps to 24. See more [here](/entrypoint.sh)
+
 ## Usage
 
 - Linux
