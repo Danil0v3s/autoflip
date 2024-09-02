@@ -265,7 +265,6 @@ namespace mediapipe
       {
         cap_->release();
       }
-      ABSL_LOG(WARNING) << decoded_frames_ << "," << frame_count_;
       if (decoded_frames_ != frame_count_)
       {
         ABSL_LOG(WARNING) << "Not all the frames are decoded (total frames: "
