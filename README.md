@@ -12,7 +12,7 @@ Changes made to this fork:
   Either compile it yourself by installing the dependencies declared at the [Dockerfile](/src/Dockerfile) or pull the docker container from `daniloleemes/autoflip:latest` and run it with
 
     ```bash
-    docker run -rm -v ./input:/workspace/input -v ./output:/workspace/output daniloleemes/autoflip ./entrypoint.sh input_video.mp4 3:4
+    docker run --rm -v ./input:/workspace/input -v ./output:/workspace/output -e INPUT_VIDEO=theoffice_parkour.mp4 -e ASPECT_RATIO=3:4 daniloleemes/autoflip
     ```
 
 ## Customization
