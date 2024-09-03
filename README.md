@@ -78,3 +78,13 @@ node {
   }
 }
 ```
+
+## Debugging generated csv
+
+Run the python script located at the debugger folder:
+
+Assuming you have an input video called theoffice.mp4 and the output was theoffice_3:4.csv
+
+```
+python3 debugger/main.py theoffice 3:4
+```
