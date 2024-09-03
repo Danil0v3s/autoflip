@@ -134,8 +134,8 @@ node {
       # }
       signal_settings {
         type: { standard: MOTION }
-        min_score: 0.6
-        max_score: 0.65
+        min_score: 0.8
+        max_score: 0.85
         is_required: false
       }
       signal_settings {
@@ -152,6 +152,7 @@ node {
 node {
   calculator: "SceneCroppingCalculator"
   input_side_packet: "EXTERNAL_ASPECT_RATIO:aspect_ratio"
+  input_side_packet: "EXTERNAL_CSV_OUTPUT_PATH:csv_path"
   input_stream: "VIDEO_FRAMES:video_raw"
   input_stream: "KEY_FRAMES:video_frames_scaled_downsampled"
   input_stream: "DETECTION_FEATURES:salient_regions"

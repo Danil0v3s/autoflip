@@ -358,7 +358,7 @@ namespace mediapipe
 
       std::vector<float> detection_scores(num_boxes_);
       std::vector<int> detection_classes(num_boxes_);
-      int raw_scores_length = num_boxes_ * num_classes_;
+
       // Filter classes by scores.
       for (int i = 0; i < num_boxes_; ++i)
       {
@@ -367,10 +367,9 @@ namespace mediapipe
         // Find the top score for box i.
         for (int score_idx = 0; score_idx < num_classes_; ++score_idx)
         {
-          int score_linear_idx = i * num_classes_ + score_idx;
-          if (ignore_classes_.find(score_idx) == ignore_classes_.end() && score_linear_idx < scores_vector.size())
+          if (ignore_classes_.find(score_idx) == ignore_classes_.end())
           {
-            auto score = scores_vector[score_linear_idx];
+            auto score = scores_vector[i * num_classes_ + score_idx];
             if (options_.sigmoid_score())
             {
               if (options_.has_score_clipping_thresh())

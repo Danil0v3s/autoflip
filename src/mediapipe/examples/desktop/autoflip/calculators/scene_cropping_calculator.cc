@@ -50,6 +50,7 @@ namespace mediapipe
     // This side packet must be used in conjunction with
     // TargetSizeType::MAXIMIZE_TARGET_DIMENSION
     constexpr char kAspectRatio[] = "EXTERNAL_ASPECT_RATIO";
+    constexpr char kCsvOutputPath[] = "EXTERNAL_CSV_OUTPUT_PATH";
 
     // Output the cropped frames, as well as visualization of crop regions and focus
     // points. Note that, KEY_FRAME_CROP_REGION_VIZ_FRAMES and
@@ -83,6 +84,10 @@ namespace mediapipe
       if (cc->InputSidePackets().HasTag(kAspectRatio))
       {
         cc->InputSidePackets().Tag(kAspectRatio).Set<std::string>();
+      }
+      if (cc->InputSidePackets().HasTag(kCsvOutputPath))
+      {
+        cc->InputSidePackets().Tag(kCsvOutputPath).Set<std::string>();
       }
       if (cc->Inputs().HasTag(kInputVideoFrames))
       {
@@ -157,14 +162,17 @@ namespace mediapipe
                 cc->Outputs().HasTag(kExternalRenderingFullVid) ||
                 cc->Outputs().HasTag(kOutputCroppedFrames))
           << "At leaset one output stream must be specified";
-      
-      logfile.open("output/output.csv", std::ios_base::trunc);
 
+      RET_CHECK(cc->InputSidePackets().HasTag(kCsvOutputPath))
+          << "EXTERNAL_CSV_OUTPUT_PATH must be set";
+          
       return absl::OkStatus();
     }
 
     absl::Status SceneCroppingCalculator::Open(CalculatorContext *cc)
     {
+      logfile.open(cc->InputSidePackets().Tag(kCsvOutputPath).Get<std::string>(), std::ios_base::trunc);
+
       options_ = cc->Options<SceneCroppingCalculatorOptions>();
       RET_CHECK_GT(options_.max_scene_size(), 0)
           << "Maximum scene size is non-positive.";
@@ -411,8 +419,8 @@ namespace mediapipe
 
     absl::Status SceneCroppingCalculator::Process(mediapipe::CalculatorContext *cc)
     {
-      //ABSL_LOG(INFO) << "Process SceneCroppingCalculator";
-      
+      // ABSL_LOG(INFO) << "Process SceneCroppingCalculator";
+
       // Sets frame dimension and initializes scenecroppingcalculator on first video
       // frame.
       if (frame_width_ < 0)
