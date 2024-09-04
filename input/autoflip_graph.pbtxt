@@ -34,7 +34,7 @@ node {
   output_stream: "video_frames_scaled_downsampled"
   options: {
     [mediapipe.PacketThinnerCalculatorOptions.ext]: {
-      thinner_type: SYNC
+      thinner_type: ASYNC
       period: 200000
     }
   }

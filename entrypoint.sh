@@ -4,7 +4,8 @@ input_video=$1
 aspect_ratio=$2
 video_filename=${input_video%.*}
 
-ffmpeg -y -i input/${input_video} -vf "scale=-2:480,fps=24" input/input_low.mp4
+echo "Downscaling video to 480w..."
+ffmpeg -hide_banner -loglevel error -y -i input/${input_video} -vf "scale=-2:480,fps=24" input/input_low.mp4
 
 cd src && bazel-bin/mediapipe/examples/desktop/autoflip/run_autoflip \
         --calculator_graph_config_file=../input/autoflip_graph.pbtxt \
