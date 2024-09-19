@@ -116,8 +116,8 @@ node {
       }
       signal_settings {
         type { standard: FACE_FULL }
-        min_score: 0.95
-        max_score: 1.0
+        min_score: 0.8
+        max_score: 0.85
         is_required: false
       }
       signal_settings {
@@ -133,7 +133,7 @@ node {
         is_required: false
       }
       signal_settings {
-        type: { standard: MOTION }
+        type: { standard: CAR }
         min_score: 0.7
         max_score: 0.75
         is_required: false
@@ -152,7 +152,6 @@ node {
 node {
   calculator: "SceneCroppingCalculator"
   input_side_packet: "EXTERNAL_ASPECT_RATIO:aspect_ratio"
-  input_side_packet: "EXTERNAL_CSV_OUTPUT_PATH:csv_path"
   input_stream: "VIDEO_FRAMES:video_raw"
   input_stream: "KEY_FRAMES:video_frames_scaled_downsampled"
   input_stream: "DETECTION_FEATURES:salient_regions"
@@ -163,47 +162,19 @@ node {
   output_stream: "SALIENT_POINT_FRAME_VIZ_FRAMES:salient_point_viz_frames"
   options: {
     [mediapipe.autoflip.SceneCroppingCalculatorOptions.ext]: {
-      max_scene_size: 100
+      max_scene_size: 600
       key_frame_crop_options: {
         score_aggregation_type: CONSTANT
       }
       scene_camera_motion_analyzer_options: {
-        # above 0.499 the camera locks at center most of the times
-        motion_stabilization_threshold_percent: 0.499
-        snap_center_max_distance_percent: 0.2
-        maximum_salient_point_weight: 100.0
-        salient_point_bound: 0.48
-        allow_sweeping: true
-        minimum_scene_span_sec_for_sweeping: 1.0
-        minimum_success_rate_for_sweeping: 0.4
-        sweep_entire_frame: true
-        duration_before_centering_us: 10
+        motion_stabilization_threshold_percent: 0.5
+        salient_point_bound: 0.499
       }
       padding_parameters: {
         blur_cv_size: 200
         overlay_opacity: 0.6
       }
       target_size_type: MAXIMIZE_TARGET_DIMENSION
-      camera_motion_options: {
-        polynomial_path_solver: {
-          prior_frame_buffer_size: 30
-        }
-        # kinematic_options: {
-          # update_rate: 0.5
-          # max_velocity: 33
-          # min_motion_to_reframe: 13.0
-          # min_motion_to_reframe_lower: 12
-          # min_motion_to_reframe_upper: 23
-          # reframe_window: 0
-          # update_rate_seconds: 0.20
-          # max_update_rate: 0.8
-          # filtering_time_window_us: 0
-          # mean_period_update_rate: 0.25
-          # max_delta_time_sec: 0
-          # max_velocity_scale: 0
-          # max_velocity_shift: 0
-        # }
-      }
     }
   }
 }
@@ -234,48 +205,48 @@ node {
 
 # ENCODING(optional): encode the video stream for the key_frame_crop_viz_frames
 # output.  Draws boxes around required and non-required objects.
-# node {
-#   calculator: "VideoPreStreamCalculator"
-#   # Fetch frame format and dimension from input frames.
-#   input_stream: "FRAME:key_frame_crop_viz_frames"
-#   # Copying frame rate and duration from original video.
-#   input_stream: "VIDEO_PRESTREAM:video_header"
-#   output_stream: "key_frame_crop_viz_frames_header"
-# }
+node {
+  calculator: "VideoPreStreamCalculator"
+  # Fetch frame format and dimension from input frames.
+  input_stream: "FRAME:key_frame_crop_viz_frames"
+  # Copying frame rate and duration from original video.
+  input_stream: "VIDEO_PRESTREAM:video_header"
+  output_stream: "key_frame_crop_viz_frames_header"
+}
 
-# node {
-#   calculator: "OpenCvVideoEncoderCalculator"
-#   input_stream: "VIDEO:key_frame_crop_viz_frames"
-#   input_stream: "VIDEO_PRESTREAM:key_frame_crop_viz_frames_header"
-#   input_side_packet: "OUTPUT_FILE_PATH:key_frame_crop_viz_frames_path"
-#   options: {
-#     [mediapipe.OpenCvVideoEncoderCalculatorOptions.ext]: {
-#       codec: "avc1"
-#       video_format: "mp4"
-#     }
-#   }
-# }
+node {
+  calculator: "OpenCvVideoEncoderCalculator"
+  input_stream: "VIDEO:key_frame_crop_viz_frames"
+  input_stream: "VIDEO_PRESTREAM:key_frame_crop_viz_frames_header"
+  input_side_packet: "OUTPUT_FILE_PATH:key_frame_crop_viz_frames_path"
+  options: {
+    [mediapipe.OpenCvVideoEncoderCalculatorOptions.ext]: {
+      codec: "avc1"
+      video_format: "mp4"
+    }
+  }
+}
 
-# # ENCODING(optional): encode the video stream for the salient_point_viz_frames
-# # output. Draws the focus points and the scene crop window (red).
-# node {
-#   calculator: "VideoPreStreamCalculator"
-#   # Fetch frame format and dimension from input frames.
-#   input_stream: "FRAME:salient_point_viz_frames"
-#   # Copying frame rate and duration from original video.
-#   input_stream: "VIDEO_PRESTREAM:video_header"
-#   output_stream: "salient_point_viz_frames_header"
-# }
+# ENCODING(optional): encode the video stream for the salient_point_viz_frames
+# output. Draws the focus points and the scene crop window (red).
+node {
+  calculator: "VideoPreStreamCalculator"
+  # Fetch frame format and dimension from input frames.
+  input_stream: "FRAME:salient_point_viz_frames"
+  # Copying frame rate and duration from original video.
+  input_stream: "VIDEO_PRESTREAM:video_header"
+  output_stream: "salient_point_viz_frames_header"
+}
 
-# node {
-#   calculator: "OpenCvVideoEncoderCalculator"
-#   input_stream: "VIDEO:salient_point_viz_frames"
-#   input_stream: "VIDEO_PRESTREAM:salient_point_viz_frames_header"
-#   input_side_packet: "OUTPUT_FILE_PATH:salient_point_viz_frames_path"
-#   options: {
-#     [mediapipe.OpenCvVideoEncoderCalculatorOptions.ext]: {
-#       codec: "avc1"
-#       video_format: "mp4"
-#     }
-#   }
-# }
+node {
+  calculator: "OpenCvVideoEncoderCalculator"
+  input_stream: "VIDEO:salient_point_viz_frames"
+  input_stream: "VIDEO_PRESTREAM:salient_point_viz_frames_header"
+  input_side_packet: "OUTPUT_FILE_PATH:salient_point_viz_frames_path"
+  options: {
+    [mediapipe.OpenCvVideoEncoderCalculatorOptions.ext]: {
+      codec: "avc1"
+      video_format: "mp4"
+    }
+  }
+}
