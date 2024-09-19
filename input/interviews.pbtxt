@@ -102,48 +102,48 @@ node {
   output_stream: "salient_regions"
   options {
     [mediapipe.autoflip.SignalFusingCalculatorOptions.ext] {
-      signal_settings {
-        type { standard: FACE_CORE_LANDMARKS }
-        min_score: 0.85
-        max_score: 0.9
-        is_required: false
-      }
-      signal_settings {
-        type { standard: FACE_ALL_LANDMARKS }
-        min_score: 0.8
-        max_score: 0.85
-        is_required: false
-      }
+      # signal_settings {
+      #   type { standard: FACE_CORE_LANDMARKS }
+      #   min_score: 0.85
+      #   max_score: 0.9
+      #   is_required: false
+      # }
+      # signal_settings {
+      #   type { standard: FACE_ALL_LANDMARKS }
+      #   min_score: 0.8
+      #   max_score: 0.85
+      #   is_required: false
+      # }
       signal_settings {
         type { standard: FACE_FULL }
         min_score: 0.95
         max_score: 1.0
         is_required: true
       }
-      signal_settings {
-        type: { standard: HUMAN }
-        min_score: 0.75
-        max_score: 0.8
-        is_required: false
-      }
-      signal_settings {
-        type: { standard: PET }
-        min_score: 0.7
-        max_score: 0.75
-        is_required: false
-      }
+      # signal_settings {
+      #   type: { standard: HUMAN }
+      #   min_score: 0.75
+      #   max_score: 0.8
+      #   is_required: false
+      # }
+      # signal_settings {
+      #   type: { standard: PET }
+      #   min_score: 0.7
+      #   max_score: 0.75
+      #   is_required: false
+      # }
       signal_settings {
         type: { standard: MOTION }
         min_score: 0.7
         max_score: 0.75
         is_required: false
       }
-      signal_settings {
-        type: { standard: OBJECT }
-        min_score: 0.1
-        max_score: 0.2
-        is_required: false
-      }
+      # signal_settings {
+      #   type: { standard: OBJECT }
+      #   min_score: 0.1
+      #   max_score: 0.2
+      #   is_required: false
+      # }
     }
   }
 }
@@ -163,15 +163,15 @@ node {
   output_stream: "SALIENT_POINT_FRAME_VIZ_FRAMES:salient_point_viz_frames"
   options: {
     [mediapipe.autoflip.SceneCroppingCalculatorOptions.ext]: {
-      max_scene_size: 600
+      max_scene_size: 30
       key_frame_crop_options: {
-        score_aggregation_type: CONSTANT
+        score_aggregation_type: MAXIMUM
         non_required_region_min_coverage_fraction: 0.5
       }
       scene_camera_motion_analyzer_options: {
         # above 0.499 the camera locks at center most of the times
         motion_stabilization_threshold_percent: 0.45
-        snap_center_max_distance_percent: 0.08
+        snap_center_max_distance_percent: 0
         maximum_salient_point_weight: 100.0
         salient_point_bound: 0.499
         allow_sweeping: true
