@@ -18,9 +18,10 @@ Changes made to this fork:
     ```
 
   - Manual (log into the container and run commands manually)
-  ```
-  docker run --rm -v $(pwd)/input:/workspace/input -v $(pwd)/output:/workspace/output -e INPUT_VIDEO=love_island_2.mp4 -e ASPECT_RATIO=3:4 --entrypoint "" -it daniloleemes/autoflip /bin/bash
-  ```
+    ```
+    docker run --rm -v $(pwd)/input:/workspace/input -v $(pwd)/output:/workspace/output -e INPUT_VIDEO=love_island_2.mp4 -e ASPECT_RATIO=3:4 --entrypoint "" -it daniloleemes/autoflip /bin/bash
+    ```
+    Then after inside the container, run `./entrypoint-manual.sh <filename.mp4> <aspect eg 3:4>`
 
 
 ## Customization
