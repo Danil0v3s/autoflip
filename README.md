@@ -9,11 +9,19 @@ Changes made to this fork:
 
 - Linux
 
-  Either compile it yourself by installing the dependencies declared at the [Dockerfile](/src/Dockerfile) or pull the docker container from `daniloleemes/autoflip:latest` and run it with
+  Either compile it yourself by installing the dependencies declared at the [Dockerfile](/src/Dockerfile) or pull the docker container from `daniloleemes/autoflip:latest` and run it:
+
+  - Automatic (sends in a file, receives output file)
 
     ```bash
     docker run --rm -v ./input:/workspace/input -v ./output:/workspace/output -e INPUT_VIDEO=theoffice_parkour.mp4 -e ASPECT_RATIO=3:4 daniloleemes/autoflip
     ```
+
+  - Manual (log into the container and run commands manually)
+  ```
+  docker run --rm -v $(pwd)/input:/workspace/input -v $(pwd)/output:/workspace/output -e INPUT_VIDEO=love_island_2.mp4 -e ASPECT_RATIO=3:4 --entrypoint "" -it daniloleemes/autoflip /bin/bash
+  ```
+
 
 ## Customization
 
